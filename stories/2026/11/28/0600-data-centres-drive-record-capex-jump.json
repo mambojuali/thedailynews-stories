@@ -1,0 +1,42 @@
+{
+  "id": "2026-11-28-data-centres-drive-record-capex-jump",
+  "title": "Data centre spending drives biggest business investment jump since 2011",
+  "slug": "data-centres-drive-record-capex-jump",
+  "format": "explainer",
+  "category": "Business",
+  "tags": [
+    "abs",
+    "business investment",
+    "data centres",
+    "economy",
+    "rba"
+  ],
+  "image_query": [
+    "data centre server racks",
+    "server room",
+    "Australian Bureau of Statistics Canberra"
+  ],
+  "excerpt": "Private business investment rose 12.2 per cent in the September quarter, the most since 2011, led by spending on data centre equipment.",
+  "content_html": "<p>Business investment in Australia jumped by the most in 15 years in the September quarter, as companies poured money into equipment for data centres, new figures from the Australian Bureau of Statistics show.</p><h2>What happened</h2><p>Private new capital expenditure rose 12.2 per cent in the three months to September in seasonally adjusted volume terms, the ABS said on Thursday. That left spending 18.6 per cent higher than a year earlier.</p><p>The statistics bureau said it was the biggest quarterly increase since the September quarter of 2011, when the mining investment boom was near its peak.</p><p>Spending on equipment, plant and machinery hit a record, climbing 23.1 per cent. Outside mining, equipment spending surged 27.1 per cent, while mining equipment rose a more modest 3.2 per cent. Investment in buildings and structures grew 1.7 per cent, which the ABS linked to renewable energy and data centre projects.</p><p>The information, media and telecommunications industry, which includes data centre operators, led the way. Its total capital spending rose 86.7 per cent to a record level, and its equipment spending was up 183.5 per cent.</p><p>By state, Victoria recorded the largest rise at 31.0 per cent, followed by New South Wales at 9.6 per cent. The Northern Territory was the only jurisdiction to go backwards, slipping 1.3 per cent.</p><p>ABS head of business statistics Robert Ewing said the result reflected <em>\"businesses investing significantly in equipment for data centres\"</em>.</p><h2>Why it matters</h2><p>Business investment is a key driver of economic growth, jobs and future productivity. A sharp lift suggests firms are confident enough to commit capital, and the scale of the data centre build-out shows how artificial intelligence is now flowing into the real economy.</p><p>Spending also broadened beyond technology. Health care and social assistance investment rose 16.6 per cent, which the ABS attributed to small businesses, while retail equipment spending grew 9.4 per cent and transport, postal and warehousing was up 3.3 per cent.</p><p>The figures are also closely watched by the Reserve Bank, because strong investment adds to demand in the economy and inflation figures released on Wednesday came in higher than expected, according to the ABC.</p><p>UBS chief economist George Tharenou told the ABC the figures confirmed that <em>\"AI/data centres investment is still booming\"</em>. Capital Economics senior Asia-Pacific economist Abhijit Surya noted that equipment spending was the main driver. He pointed out the rise was far larger than the 4.4 per cent increase forecasters had expected, and followed a June quarter fall that has been revised to 2 per cent. He argued the investment boom would keep the Reserve Bank on the sidelines, the ABC reported.</p><h2>What it means for you</h2><p><strong>Households:</strong> Strong business investment tends to support employment, but it can also keep pressure on prices. UBS told the ABC it does not expect the Reserve Bank to begin cutting interest rates until August 2027, which would mean no near-term relief for borrowers if that view proves correct.</p><p><strong>Investors:</strong> The data confirms heavy spending by data centre operators and the businesses that supply them. Economists' forecasts and market moves can change quickly, and the figures say nothing about the profitability of individual companies.</p><p><strong>Small business:</strong> The ABS singled out small businesses in health care as a source of extra investment, showing the lift is not limited to large technology firms.</p><h2>What's next</h2><p>Businesses also revised up their spending plans. The fourth estimate of expected capital expenditure for the 2026-27 financial year was 11.8 per cent higher than the previous estimate, in current prices.</p><p>The capital expenditure survey is one of the inputs to the ABS national accounts, so the September quarter growth figures will show how much the investment surge added to the wider economy.</p>",
+  "sources": [
+    {
+      "name": "Australian Bureau of Statistics — Data centre investment continues to drive new capital expenditure",
+      "url": "https://www.abs.gov.au/media-centre/media-releases/data-centre-investment-continues-drive-new-capital-expenditure"
+    },
+    {
+      "name": "ABC News — business live blog, 26 November 2026",
+      "url": "https://www.abc.net.au/news/2026-11-26/asx-markets-business-news-live-updates-thursday-26-november/107428134"
+    },
+    {
+      "name": "ABC News — business live blog, 25 November 2026 (inflation data)",
+      "url": "https://www.abc.net.au/news/2026-11-25/asx-markets-business-live-news/107423208"
+    },
+    {
+      "name": "Tech Times — Australia capex jumps 12% on data centre equipment",
+      "url": "https://www.techtimes.com/articles/331566/20261126/australia-capex-jumps-12-data-center-equipment-rba-governor-says-about-70-imported.htm"
+    }
+  ],
+  "editor_notes": "Editor checks (round 2 pass; round 1 fixed an altered quote, removed an unsourced national accounts date, lifted word count): all figures match ABS media release of 26 Nov 2026 (12.2% q/q SA volume; 18.6% y/y; equipment +23.1%; non-mining equipment +27.1%; mining equipment +3.2%; buildings +1.7%; IMT +86.7%, IMT equipment +183.5%; VIC +31.0%, NSW +9.6%, NT -1.3%; health care +16.6%, retail equipment +9.4%, transport +3.3%; 2026-27 estimate 4 up 11.8% on estimate 3). Largest since Sept qtr 2011 per ABS. Two quotes, both under 20 words, attributed (Ewing/ABS; Tharenou/UBS via ABC). Economist views attributed, no advice. Unverified RBA governor import-share claim excluded. Headline 71 chars, excerpt 135 chars, 616 words. image_query objects/buildings only.",
+  "created_at": "2026-11-28T06:00:00+10:00",
+  "run": "2026-11-28-0600"
+}

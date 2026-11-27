@@ -1,0 +1,46 @@
+{
+  "id": "2026-11-28-victorians-vote-in-state-election",
+  "title": "Victorians head to the polls as Carroll and Wilson face voters",
+  "slug": "victorians-vote-in-state-election",
+  "format": "wire",
+  "category": "Australia",
+  "tags": [
+    "victorian election",
+    "victoria",
+    "ben carroll",
+    "jess wilson",
+    "vec"
+  ],
+  "image_query": [
+    "Parliament House Melbourne",
+    "Victorian Legislative Assembly chamber",
+    "polling place Australia"
+  ],
+  "excerpt": "Victorians vote today, with Labor seeking a fourth term and the Coalition led by Jess Wilson ahead in late polls. More than 2.2 million have voted early.",
+  "content_html": "<p>Victorians are voting in a state election on Saturday 28 November, with Labor Premier Ben Carroll seeking a fourth straight term for his party and Liberal leader Jess Wilson trying to return the Coalition to government for the first time since 2014.</p><p>Polling places close at 6pm, and counting of lower house ballots begins once voting ends. Votes cast at early voting centres will also be counted on election night, according to the ABC.</p><p>A huge share of the electorate has already voted. Daily figures published by the Victorian Electoral Commission show more than 1.9 million people voted in person at early voting centres between 17 and 26 November, while more than 310,000 postal votes had been returned over the same period. Those totals do not include Friday, the last day of early voting.</p><p>The commission opened a record 210 early voting centres for this election, about 30 per cent more than in 2022. Postal ballots must be filled in and posted by 6pm on Saturday.</p><h2>What is at stake</h2><p>All 88 seats in the Legislative Assembly are being contested, and a party needs 45 to govern in its own right. Voters are also electing the 40-member Legislative Council, with five members chosen from each of eight regions.</p><p>At the 2022 election Labor won 56 lower house seats and the Liberal-National Coalition won 28. Labor has governed Victoria since 2014, first under Daniel Andrews and then Jacinta Allan, before Carroll was sworn in as the state's 50th premier on 28 July this year. Wilson became Liberal leader in November 2025.</p><h2>The final pitches</h2><p>Labor closed its campaign on health, education, community safety and cost-of-living relief. The Coalition focused on cutting crime and lowering household costs, and has promised no new or higher taxes.</p><p>One Nation, led in Victoria by Warren Pickering, and the Greens are also running candidates across the state and are hoping to win lower house seats.</p><h2>What the polls say</h2><p>Late opinion polls have pointed to a swing against the government. A Newspoll published in The Australian on Thursday night put the Coalition ahead of Labor by 57.5 to 42.5 per cent after preferences, according to The Nightly. A DemosAU survey taken from 21 to 25 November had the Coalition leading 55 to 45, as reported by Bushletter.</p><p>Polls are a snapshot of voter intentions and can differ from the result.</p><h2>What happens next</h2><p>Voting is compulsory for enrolled Victorians, and the ABC reports the fine for failing to vote is now $105. The commission must return the election writs by 19 December, although results in many seats are expected to be clear on Saturday night.</p>",
+  "sources": [
+    {
+      "name": "Victorian Electoral Commission — voting statistics, 2026 state election",
+      "url": "https://www.vec.vic.gov.au/voting/2026-state-election/voting-statistics"
+    },
+    {
+      "name": "Victorian Electoral Commission — record number of early voting centres",
+      "url": "https://www.vec.vic.gov.au/about-us/media/media-releases/record-number-of-early-voting-centres-to-open-for-2026-state-election"
+    },
+    {
+      "name": "ABC News — Victorian election early voting explainer",
+      "url": "https://www.abc.net.au/news/2026-11-11/victorian-election-early-voting-postal-voting-november-28/107242694"
+    },
+    {
+      "name": "The Nightly — Labor facing biggest swing in 70 years",
+      "url": "https://thenightly.com.au/politics/vic-election-2026/why-labor-is-facing-the-biggest-double-digit-swing-against-it-in-more-than-70-years-c-23219620"
+    },
+    {
+      "name": "Bushletter — Victoria votes Saturday with Coalition ahead in final poll",
+      "url": "https://www.bushletter.com/victoria-votes-saturday-with-coalition-ahead-in-final-poll/"
+    }
+  ],
+  "editor_notes": "Editor checks (round 1 pass): early-vote totals summed from VEC daily figures 17-26 Nov (1,933,598 early; 310,808 postal returned), Friday excluded and stated. 210 centres/30% from VEC release. 88 seats/45 majority, 40 MLCs in 8 regions of 5 per ABC and VEC. 2022 seat counts per The Nightly and Wikipedia cross-check. Carroll sworn in 28 July 2026 as 50th premier per Bushletter, matches Wikipedia polling page. Polls attributed to reporting outlets (Newspoll via The Nightly; DemosAU via Bushletter) and labelled as snapshots. Betting odds deliberately excluded. Balance: Labor and Coalition closing pitches given equal space; Greens and One Nation noted. No quotes. Headline 62 chars, excerpt 153 chars, 439 words, Australian spelling. image_query names places only. No sentences mirror sources.",
+  "created_at": "2026-11-28T06:00:00+10:00",
+  "run": "2026-11-28-0600"
+}
