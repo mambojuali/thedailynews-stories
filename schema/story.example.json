@@ -1,0 +1,17 @@
+{
+  "id": "2026-11-27-rba-holds-cash-rate",
+  "title": "EXAMPLE ONLY — figures are placeholders",
+  "slug": "rba-holds-cash-rate-november",
+  "format": "explainer",
+  "category": "Business",
+  "tags": ["rba", "interest rates", "mortgages", "inflation"],
+  "excerpt": "The Reserve Bank has left the cash rate unchanged, citing sticky services inflation. Here's what it means for borrowers.",
+  "content_html": "<p>Lede paragraph…</p><h2>What happened</h2><p>…</p><h2>Why it matters</h2><p>…</p><h2>What it means for you</h2><p>…</p><h2>What's next</h2><p>…</p>",
+  "sources": [
+    {"name": "Reserve Bank of Australia — statement", "url": "https://www.rba.gov.au/..."},
+    {"name": "ABC News", "url": "https://www.abc.net.au/news/..."}
+  ],
+  "editor_notes": "Facts checked against RBA statement. Quote from governor under 20 words, attributed.",
+  "created_at": "2026-11-27T06:00:00+10:00",
+  "run": "2026-11-27-0600"
+}
