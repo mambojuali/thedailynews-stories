@@ -10,5 +10,4 @@ AI story pipeline for **thedailynews.news**.
 - `wordpress/tdn-github-importer.php` — WordPress plugin that imports new stories as drafts every 15 minutes
 
 Flow: scheduled desk runs at 6am, 12pm and 5pm Brisbane time → commits 2 stories → WordPress importer creates drafts → editor approves and publishes in WP admin.
-- `wordpress/tdn-news/` — the site's newspaper theme (source); `deploy/tdn-news.tgz` is the packaged copy
-- `d.sh` — one-shot deploy script run on the Hostinger server to install/refresh the theme
+- `wordpress/tdn-news/` — the site's newspaper theme (upload as a zip under Appearance → Themes)
