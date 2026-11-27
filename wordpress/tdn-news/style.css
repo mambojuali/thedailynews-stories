@@ -1,7 +1,7 @@
 /*
 Theme Name: The Daily News
 Description: Lightweight newspaper theme for thedailynews.news
-Version: 1.2.0
+Version: 1.3.0
 Author: The Daily News
 License: GPL-2.0-or-later
 Text Domain: tdn-news
@@ -216,4 +216,57 @@ img { max-width: 100%; height: auto; display: block; }
 	.summary-item, .summary-item.is-latest { grid-template-columns: 96px 1fr; gap: 12px; }
 	.summary-thumb, .summary-item.is-latest .summary-thumb { width: 96px; }
 	.summary-item.is-latest h3 { font-size: 18px; }
+}
+
+/* ---------- Subscribe ---------- */
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.subscribe-btn { background: var(--accent); color: #fff !important; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; padding: 5px 12px; border-radius: 3px; }
+.subscribe-btn:hover { background: #a51117; }
+.tdn-notice { font-size: 15px; font-weight: 600; padding: 12px 0; }
+.tdn-notice.ok { background: #e7f5ec; color: #0f5132; border-bottom: 1px solid #b7e1c6; }
+.tdn-notice.err { background: #fdecec; color: #842029; border-bottom: 1px solid #f3c2c2; }
+.subscribe-band { background: var(--wash); border-top: 4px solid var(--accent); padding: 34px 0; margin-top: 30px; scroll-margin-top: 60px; }
+.subscribe-band .wrap { display: grid; grid-template-columns: 1fr 1.4fr; gap: 36px; align-items: start; }
+.subscribe-band h2 { font: 700 28px/1.15 var(--serif); margin: 0 0 8px; color: var(--brand); }
+.subscribe-band p { margin: 0; color: #3b414c; }
+.tdn-subscribe-form fieldset { border: 0; padding: 0; margin: 0 0 12px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.tdn-subscribe-form legend { font: 700 11px/1 var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 8px; width: 100%; }
+.tdn-subscribe-form label { font-size: 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.tdn-sub-row { display: flex; gap: 8px; }
+.tdn-sub-row input[type=email] { flex: 1; padding: 11px 12px; border: 1px solid #c9ced6; border-radius: 3px; font-size: 15px; min-width: 0; }
+.tdn-sub-row button, .tdn-btn { background: var(--accent); color: #fff; border: 0; padding: 11px 20px; font-weight: 700; font-size: 15px; border-radius: 3px; cursor: pointer; }
+.tdn-sub-row button:hover, .tdn-btn:hover { background: #a51117; }
+.tdn-sub-fine { font-size: 12px !important; color: var(--muted) !important; margin-top: 8px !important; }
+.tdn-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---------- Comments ---------- */
+.comments { border-top: 3px solid var(--ink); margin-top: 40px; padding-top: 12px; }
+.comments-title { font: 700 22px/1.2 var(--serif); margin: 0 0 16px; }
+.comment-list, .comment-list .children { list-style: none; margin: 0; padding: 0; }
+.comment-list .children { margin-left: 22px; padding-left: 16px; border-left: 2px solid var(--line); }
+.comment-body { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.comment-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.comment-author { color: var(--ink); font-size: 15px; }
+.comment-content { font-size: 16px; line-height: 1.6; }
+.comment-content p { margin: 0 0 .7em; }
+.comment-actions a { font-size: 13px; font-weight: 700; color: var(--accent); }
+.comment-awaiting { font-size: 13px; color: #8a4b08; font-style: italic; }
+.tdn-staff > .comment-body { background: #f1f5fb; border-left: 4px solid var(--brand); padding: 14px 16px; border-bottom: 0; margin: 8px 0; }
+.staff-badge { background: var(--brand); color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 3px; }
+.staff-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+.tdn-reply-sources { font-size: 13px; color: var(--muted); }
+.comment-respond { margin-top: 24px; background: var(--wash); padding: 18px 20px; border-radius: 4px; }
+.comment-respond h3 { font: 700 20px/1.2 var(--serif); margin: 0 0 8px; }
+.comment-respond label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.comment-respond input[type=text], .comment-respond input[type=email], .comment-respond input[type=url], .comment-respond textarea { width: 100%; padding: 10px; border: 1px solid #c9ced6; border-radius: 3px; font: 15px var(--sans); }
+.comment-respond p { margin: 0 0 12px; }
+.comment-notes { font-size: 13px; color: var(--muted); }
+.comment-form-cookies-consent label { display: inline; font-weight: 400; }
+
+@media (max-width: 800px) {
+	.subscribe-band .wrap { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 600px) {
+	.topbar .subscribe-btn { display: inline-block; }
+	.tdn-sub-row { flex-direction: column; }
 }

@@ -47,6 +47,12 @@ while ( have_posts() ) :
 			<?php endif; ?>
 
 			<?php
+			if ( comments_open() || get_comments_number() ) {
+				comments_template();
+			}
+			?>
+
+			<?php
 			$related = $cat ? get_posts( array( 'numberposts' => 3, 'post_status' => 'publish', 'category' => $cat->term_id, 'post__not_in' => array( get_the_ID() ) ) ) : array();
 			if ( $related ) :
 				?>

@@ -1,5 +1,17 @@
 </main>
 
+<?php if ( function_exists( 'tdn_subscribe_form' ) ) : ?>
+<section id="subscribe" class="subscribe-band">
+	<div class="wrap">
+		<div class="sub-intro">
+			<h2>Get The Daily News in your inbox</h2>
+			<p>Choose the sections you care about and get every new story, or one tidy 7am digest.</p>
+		</div>
+		<?php tdn_subscribe_form( 'band' ); ?>
+	</div>
+</section>
+<?php endif; ?>
+
 <footer class="site-footer">
 	<div class="wrap">
 		<p class="foot-title"><?php bloginfo( 'name' ); ?></p>

@@ -175,3 +175,49 @@ add_action( 'rss2_item', function () {
 		}
 	}
 } );
+
+/** Comment markup with a badge for replies from the desk. */
+function tdn_comment( $comment, $args, $depth ) {
+	$staff = (bool) get_comment_meta( $comment->comment_ID, '_tdn_staff', true );
+	?>
+	<li id="comment-<?php comment_ID(); ?>" <?php comment_class( $staff ? 'tdn-staff' : '' ); ?>>
+		<article class="comment-body">
+			<header class="comment-meta">
+				<strong class="comment-author"><?php comment_author(); ?></strong>
+				<?php if ( $staff ) : ?><span class="staff-badge">Daily News desk</span><?php endif; ?>
+				<time datetime="<?php comment_time( 'c' ); ?>"><?php echo esc_html( human_time_diff( get_comment_time( 'U', true ), time() ) . ' ago' ); ?></time>
+			</header>
+			<?php if ( '0' === $comment->comment_approved ) : ?>
+				<p class="comment-awaiting">Your comment is awaiting moderation.</p>
+			<?php endif; ?>
+			<div class="comment-content"><?php comment_text(); ?></div>
+			<?php if ( $staff ) : ?><p class="staff-note">Reply drafted with AI assistance from the story's sources and reviewed by The Daily News.</p><?php endif; ?>
+			<footer class="comment-actions">
+				<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'], 'reply_text' => 'Reply' ) ) ); ?>
+			</footer>
+		</article>
+	<?php
+}
+
+add_action( 'wp_enqueue_scripts', function () {
+	if ( is_singular( 'post' ) && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
+	}
+} );
+
+/** Banner for subscription results (?tdn_notice=...). */
+function tdn_notice() {
+	$map = array(
+		'check'        => array( 'ok', 'Nearly there — check your inbox and click the link to confirm your subscription.' ),
+		'confirmed'    => array( 'ok', 'You\'re subscribed. Your first email will arrive with the next stories in your sections.' ),
+		'unsubscribed' => array( 'ok', 'You\'ve been unsubscribed. You won\'t receive any more emails from us.' ),
+		'bademail'     => array( 'err', 'That email address doesn\'t look right. Please try again.' ),
+		'nocats'       => array( 'err', 'Please choose at least one section.' ),
+		'slow'         => array( 'err', 'Too many attempts. Please try again in an hour.' ),
+		'badlink'      => array( 'err', 'That link has expired or was already used.' ),
+	);
+	$k = sanitize_key( $_GET['tdn_notice'] ?? '' );
+	if ( isset( $map[ $k ] ) ) {
+		echo '<div class="tdn-notice ' . esc_attr( $map[ $k ][0] ) . '"><div class="wrap">' . esc_html( $map[ $k ][1] ) . '</div></div>';
+	}
+}

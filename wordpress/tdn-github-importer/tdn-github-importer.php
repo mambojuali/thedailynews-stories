@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
- * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.3.1
+ * Description: Imports stories from GitHub as drafts, finds licensed photos, imports desk replies to reader comments, and runs email subscriptions.
+ * Version: 1.4.0
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -58,10 +58,20 @@ class TDN_GitHub_Importer {
 	}
 
 	private static function settings() {
-		return wp_parse_args( get_option( self::OPT, array() ), array( 'owner' => '', 'repo' => '', 'branch' => 'main', 'token' => '' ) );
+		return wp_parse_args( get_option( self::OPT, array() ), array( 'owner' => '', 'repo' => '', 'branch' => 'main', 'token' => '', 'auto_replies' => 0 ) );
 	}
 
-	private static function log( $msg ) {
+	public static function get_settings() {
+		return self::settings();
+	}
+
+	/** Raw file contents from the repo branch. */
+	public static function gh_raw( $path ) {
+		$s = self::settings();
+		return self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $path ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
+	}
+
+	public static function log( $msg ) {
 		$log   = get_option( self::LOG, array() );
 		$log[] = current_time( 'mysql' ) . ' — ' . $msg;
 		update_option( self::LOG, array_slice( $log, -50 ), false );
@@ -168,6 +178,9 @@ class TDN_GitHub_Importer {
 			}
 		}
 		update_option( self::DONE, $done, false );
+		if ( class_exists( 'TDN_Comments' ) ) {
+			TDN_Comments::import_replies( $tree );
+		}
 		if ( 0 === $new ) {
 			self::log( 'Checked GitHub: no new stories.' );
 		}
@@ -454,6 +467,7 @@ class TDN_GitHub_Importer {
 				'post_excerpt'  => sanitize_text_field( $story['excerpt'] ?? '' ),
 				'post_content'  => $content,
 				'post_status'   => 'draft',
+				'comment_status' => 'open',
 				'post_author'   => $admins ? (int) $admins[0] : 1,
 				'post_category' => array( $cat_id ),
 			),
@@ -489,6 +503,7 @@ class TDN_GitHub_Importer {
 						'repo'   => sanitize_text_field( $in['repo'] ?? '' ),
 						'branch' => sanitize_text_field( $in['branch'] ?? 'main' ),
 						'token'  => ( isset( $in['token'] ) && '' !== trim( $in['token'] ) ) ? trim( $in['token'] ) : $old['token'],
+						'auto_replies' => empty( $in['auto_replies'] ) ? 0 : 1,
 					);
 				},
 			)
@@ -523,6 +538,8 @@ class TDN_GitHub_Importer {
 					<tr><th>Branch</th><td><input name="<?php echo esc_attr( self::OPT ); ?>[branch]" value="<?php echo esc_attr( $s['branch'] ); ?>" class="regular-text"></td></tr>
 					<tr><th>GitHub token</th><td><input type="password" name="<?php echo esc_attr( self::OPT ); ?>[token]" value="" placeholder="<?php echo $s['token'] ? 'Saved — leave blank to keep' : 'Fine-grained token, Contents: Read-only'; ?>" class="regular-text" autocomplete="off">
 						<p class="description">Create at GitHub → Settings → Developer settings → Fine-grained tokens. Repository access: only <code>thedailynews-stories</code>. Permissions: Contents → Read-only.</p></td></tr>
+					<tr><th>Desk replies to comments</th><td><label><input type="checkbox" name="<?php echo esc_attr( self::OPT ); ?>[auto_replies]" value="1" <?php checked( ! empty( $s['auto_replies'] ) ); ?>> Publish replies automatically</label>
+						<p class="description">Off: replies wait under <a href="<?php echo esc_url( admin_url( 'edit-comments.php?comment_status=moderated' ) ); ?>">Comments → Pending</a> for your approval.</p></td></tr>
 				</table>
 				<?php submit_button( 'Save settings' ); ?>
 			</form>
@@ -540,6 +557,10 @@ class TDN_GitHub_Importer {
 				<div class="notice notice-success"><p><?php echo (int) $_GET['updated']; ?> file(s) updated from GitHub.</p></div>
 			<?php endif; ?>
 			<p>Next automatic check: <?php echo $next ? esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next ), 'D j M, g:i a' ) ) : 'not scheduled'; ?></p>
+			<?php if ( class_exists( 'TDN_Subs' ) ) : $c = TDN_Subs::counts(); ?>
+				<h2>Email subscribers</h2>
+				<p>Daily digest: <strong><?php echo (int) $c['active_daily']; ?></strong> · Every story: <strong><?php echo (int) $c['active_instant']; ?></strong> · Awaiting confirmation: <?php echo (int) $c['pending']; ?> · Unsubscribed: <?php echo (int) $c['unsub']; ?></p>
+			<?php endif; ?>
 			<h2>Recent activity</h2>
 			<pre style="background:#fff;padding:12px;max-height:320px;overflow:auto"><?php echo esc_html( implode( "\n", $log ) ?: 'Nothing yet.' ); ?></pre>
 		</div>
@@ -548,5 +569,7 @@ class TDN_GitHub_Importer {
 }
 
 TDN_GitHub_Importer::init();
+require_once __DIR__ . '/includes/comments.php';
+require_once __DIR__ . '/includes/subscriptions.php';
 register_activation_hook( __FILE__, array( 'TDN_GitHub_Importer', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'TDN_GitHub_Importer', 'deactivate' ) );

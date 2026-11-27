@@ -12,12 +12,16 @@
 <div class="topbar">
 	<div class="wrap">
 		<span><?php echo esc_html( wp_date( 'l, j F Y' ) ); ?></span>
+		<div class="topbar-right">
+		<a class="subscribe-btn" href="#subscribe">Subscribe</a>
 		<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<label class="screen-reader-text" for="s">Search</label>
 			<input type="search" id="s" name="s" placeholder="Search The Daily News" value="<?php echo esc_attr( get_search_query() ); ?>">
 		</form>
+		</div>
 	</div>
 </div>
+<?php tdn_notice(); ?>
 
 <header class="masthead">
 	<div class="wrap">
