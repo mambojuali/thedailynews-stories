@@ -1,6 +1,7 @@
 #!/bin/sh
 # One-shot deploy for thedailynews.news (run by a temporary Hostinger cron job).
 set -e
+HOME=/home/u199070448
 H="$HOME/.tdnh"
 W="$HOME/domains/thedailynews.news/public_html"
 WP="/usr/local/bin/wp --path=$W"
