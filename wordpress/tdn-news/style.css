@@ -1,7 +1,7 @@
 /*
 Theme Name: The Daily News
 Description: Lightweight newspaper theme for thedailynews.news
-Version: 1.0.1
+Version: 1.0.2
 Author: The Daily News
 License: GPL-2.0-or-later
 Text Domain: tdn-news
@@ -102,6 +102,36 @@ img { max-width: 100%; height: auto; display: block; }
 .card.first h3 { font-size: 26px; }
 .empty-note { color: var(--muted); font-style: italic; }
 
+/* ---------- Homepage: summary page ---------- */
+.summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 36px 44px; padding: 28px 0 44px; align-items: start; }
+.summary-head { display: flex; justify-content: space-between; align-items: baseline; border-top: 4px solid var(--ink); padding-top: 10px; margin-bottom: 6px; }
+.summary-head h2 { font: 800 24px/1 var(--sans); margin: 0; text-transform: uppercase; letter-spacing: .02em; }
+.summary-head a.more { font-size: 13px; font-weight: 700; color: var(--accent); }
+.summary-block.cat-australia .summary-head { border-color: var(--cat-australia); }
+.summary-block.cat-australia .summary-head h2 { color: var(--cat-australia); }
+.summary-block.cat-business .summary-head { border-color: var(--cat-business); }
+.summary-block.cat-business .summary-head h2 { color: var(--cat-business); }
+.summary-block.cat-property .summary-head { border-color: var(--cat-property); }
+.summary-block.cat-property .summary-head h2 { color: var(--cat-property); }
+.summary-block.cat-world .summary-head { border-color: var(--cat-world); }
+.summary-block.cat-world .summary-head h2 { color: var(--cat-world); }
+.summary-item { display: grid; grid-template-columns: 120px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.summary-item:last-child { border-bottom: 0; }
+.summary-thumb { display: block; width: 120px; aspect-ratio: 8/5; overflow: hidden; background: var(--wash); border-radius: 3px; }
+.summary-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.summary-text h3 { font: 800 17px/1.28 var(--sans); margin: 0 0 5px; color: var(--ink); }
+.summary-text .brief { font-size: 14px; line-height: 1.45; color: #3b414c; margin: 0 0 5px; }
+.summary-text .meta { font-size: 12px; }
+.summary-item.is-latest { grid-template-columns: 200px 1fr; gap: 16px; padding-top: 16px; }
+.summary-item.is-latest .summary-thumb { width: 200px; }
+.summary-item.is-latest h3 { font-size: 21px; }
+.summary-item.is-latest .brief { font-size: 15px; }
+.thumb-fallback { display: flex; align-items: flex-end; width: 100%; height: 100%; padding: 8px; background: var(--brand); color: #fff; font: 800 11px/1 var(--sans); text-transform: uppercase; letter-spacing: .1em; background-image: linear-gradient(135deg, rgba(255,255,255,.14) 0 25%, transparent 25% 50%, rgba(255,255,255,.07) 50% 75%, transparent 75%); background-size: 24px 24px; }
+.thumb-fallback.cat-australia { background-color: var(--cat-australia); }
+.thumb-fallback.cat-business { background-color: var(--cat-business); }
+.thumb-fallback.cat-property { background-color: var(--cat-property); }
+.thumb-fallback.cat-world { background-color: var(--cat-world); }
+
 /* ---------- Sidebar ---------- */
 .sidebar .widget { margin-bottom: 32px; }
 .sidebar h2 { font: 700 13px/1 var(--sans); text-transform: uppercase; letter-spacing: .1em; border-top: 3px solid var(--accent); padding-top: 10px; margin: 0 0 14px; }
@@ -158,7 +188,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-	.lead-zone, .home-body { grid-template-columns: 1fr; }
+	.lead-zone, .home-body, .summary-grid { grid-template-columns: 1fr; }
 	.rail { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 18px; }
 	.related .cards { grid-template-columns: 1fr 1fr; }
 }
@@ -168,4 +198,7 @@ img { max-width: 100%; height: auto; display: block; }
 	.topbar .search-form { display: none; }
 	.sections ul { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
 	.entry-content { font-size: 18px; }
+	.summary-item, .summary-item.is-latest { grid-template-columns: 96px 1fr; gap: 12px; }
+	.summary-thumb, .summary-item.is-latest .summary-thumb { width: 96px; }
+	.summary-item.is-latest h3 { font-size: 18px; }
 }

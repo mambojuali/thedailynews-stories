@@ -57,6 +57,24 @@ function tdn_excerpt( $post_id = null, $words = 28 ) {
 	return wp_trim_words( $e, $words, '…' );
 }
 
+/** Small story picture: featured image if set, else a section-coloured tile. */
+function tdn_thumb( $post_id, $slug = '', $name = '' ) {
+	if ( has_post_thumbnail( $post_id ) ) {
+		echo get_the_post_thumbnail( $post_id, 'tdn-thumb', array( 'loading' => 'lazy', 'alt' => '' ) );
+		return;
+	}
+	if ( ! $slug ) {
+		$c    = tdn_primary_cat( $post_id );
+		$slug = $c ? $c->slug : '';
+		$name = $c ? $c->name : '';
+	}
+	echo '<span class="thumb-fallback cat-' . esc_attr( $slug ) . '"><span>' . esc_html( $name ?: 'News' ) . '</span></span>';
+}
+
+add_action( 'after_setup_theme', function () {
+	add_image_size( 'tdn-thumb', 320, 200, true );
+}, 20 );
+
 /** Card markup used across the theme. */
 function tdn_card( $post_id, $class = '', $show_excerpt = true, $size = 'tdn-card' ) {
 	$has = has_post_thumbnail( $post_id );
