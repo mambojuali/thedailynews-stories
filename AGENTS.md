@@ -44,4 +44,9 @@ Return the story to the Writer with specific fixes (max 2 rounds). If it still f
 ## Don'ts
 - Never publish to WordPress or change site settings.
 - Never delete or rewrite earlier stories or ledger lines.
-- Never include images.
+- Never include images other than the generated headline card (tools/make_card.py).
+
+## Headline card (Publisher step, every story)
+After saving each story JSON, render its headline card and commit it with the story:
+`pip install --quiet pillow 2>/dev/null; python3 tools/make_card.py stories/YYYY/MM/DD/<run>-<slug>.json`
+This writes `<run>-<slug>.png` next to the JSON. The WordPress importer sets it as the featured image (homepage thumbnail + social share image). Commit both files together.

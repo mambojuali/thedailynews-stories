@@ -29,7 +29,7 @@ Rule of thumb: Category `Business` or `Property` → `explainer`. Everything els
 6. **Politics is even-handed.** Give the government and the main opposition (or the relevant other side) equal treatment.
 7. **No graphic violence, no speculation about death tolls.** Use official figures with the date and source.
 8. **Freshness.** The news must be from the last 24 hours (48 for explainers), and not already covered in `ledger.jsonl` in the last 3 days unless there's a material new development.
-9. No images in v1 (copyright). The plugin leaves the featured image empty for the human editor.
+9. No photos from the web (copyright). Every story gets an original headline card made by `tools/make_card.py`; editors may swap in a licensed photo in WordPress.
 
 ## Categories (use exactly one)
 `Australia`, `Business`, `Property`, `World`

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -100,6 +100,21 @@ class TDN_GitHub_Importer {
 		$tree = json_decode( $body, true );
 		$done = get_option( self::DONE, array() );
 		$new  = 0;
+		$pngs = array();
+		foreach ( (array) ( $tree['tree'] ?? array() ) as $item ) {
+			$p = $item['path'] ?? '';
+			if ( 'blob' === ( $item['type'] ?? '' ) && 0 === strpos( $p, 'stories/' ) && '.png' === substr( $p, -4 ) ) {
+				$pngs[ $p ] = true;
+			}
+		}
+
+		// Backfill: attach headline cards to already-imported stories that have none.
+		foreach ( $done as $jpath => $pid ) {
+			$png = substr( $jpath, 0, -5 ) . '.png';
+			if ( is_int( $pid ) && isset( $pngs[ $png ] ) && get_post( $pid ) && ! has_post_thumbnail( $pid ) ) {
+				self::attach_card( $pid, $png );
+			}
+		}
 
 		foreach ( (array) ( $tree['tree'] ?? array() ) as $item ) {
 			$path = $item['path'] ?? '';
@@ -122,6 +137,10 @@ class TDN_GitHub_Importer {
 			}
 			$post_id = self::create_draft( $story, $path );
 			if ( $post_id ) {
+				$png = substr( $path, 0, -5 ) . '.png';
+				if ( isset( $pngs[ $png ] ) ) {
+					self::attach_card( $post_id, $png );
+				}
 				$done[ $path ] = $post_id;
 				$new++;
 				self::log( 'Draft #' . $post_id . ' created: ' . $story['title'] );
@@ -132,6 +151,41 @@ class TDN_GitHub_Importer {
 			self::log( 'Checked GitHub: no new stories.' );
 		}
 		return $new;
+	}
+
+	/** Download a headline card PNG from the repo and set it as the post's featured image. */
+	private static function attach_card( $post_id, $png_path ) {
+		$s   = self::settings();
+		$bin = self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $png_path ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
+		if ( is_wp_error( $bin ) || strlen( $bin ) < 100 ) {
+			self::log( 'Card download failed: ' . $png_path );
+			return 0;
+		}
+		$name   = sanitize_file_name( basename( $png_path ) );
+		$upload = wp_upload_bits( $name, null, $bin );
+		if ( ! empty( $upload['error'] ) ) {
+			self::log( 'Card save failed: ' . $upload['error'] );
+			return 0;
+		}
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$title  = get_the_title( $post_id );
+		$att_id = wp_insert_attachment(
+			array(
+				'post_mime_type' => 'image/png',
+				'post_title'     => $title,
+				'post_status'    => 'inherit',
+			),
+			$upload['file'],
+			$post_id
+		);
+		if ( is_wp_error( $att_id ) || ! $att_id ) {
+			return 0;
+		}
+		wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
+		update_post_meta( $att_id, '_wp_attachment_image_alt', $title );
+		set_post_thumbnail( $post_id, $att_id );
+		self::log( 'Card attached to #' . $post_id );
+		return $att_id;
 	}
 
 	private static function create_draft( $story, $path ) {

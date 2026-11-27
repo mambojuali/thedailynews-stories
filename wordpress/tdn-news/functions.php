@@ -120,10 +120,58 @@ function tdn_sections_nav( $current = '' ) {
 	echo '</ul>';
 }
 
-/** Meta description from excerpt (simple SEO). */
+/** Meta description + Open Graph / Twitter Card tags (used by social previews and auto-posters). */
 add_action( 'wp_head', function () {
-	$desc = is_singular() ? get_the_excerpt() : get_bloginfo( 'description' );
+	$single = is_singular( 'post' );
+	$title  = $single ? get_the_title() : get_bloginfo( 'name' );
+	$desc   = $single ? get_the_excerpt() : get_bloginfo( 'description' );
+	$desc   = wp_trim_words( wp_strip_all_tags( (string) $desc ), 35, '' );
+	$url    = $single ? get_permalink() : home_url( '/' );
+	$img    = $single && has_post_thumbnail() ? get_the_post_thumbnail_url( null, 'full' ) : get_option( 'tdn_share_default_url', '' );
+
 	if ( $desc ) {
-		echo '<meta name="description" content="' . esc_attr( wp_trim_words( $desc, 30, '' ) ) . '">' . "\n";
+		echo '<meta name="description" content="' . esc_attr( $desc ) . '">' . "\n";
+	}
+	$tags = array(
+		'og:site_name'   => get_bloginfo( 'name' ),
+		'og:type'        => $single ? 'article' : 'website',
+		'og:title'       => $title,
+		'og:description' => $desc,
+		'og:url'         => $url,
+		'og:locale'      => 'en_AU',
+	);
+	foreach ( $tags as $k => $v ) {
+		echo '<meta property="' . esc_attr( $k ) . '" content="' . esc_attr( $v ) . '">' . "\n";
+	}
+	if ( $img ) {
+		echo '<meta property="og:image" content="' . esc_url( $img ) . '">' . "\n";
+		echo '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">' . "\n";
+	}
+	if ( $single ) {
+		echo '<meta property="article:published_time" content="' . esc_attr( get_the_date( 'c' ) ) . '">' . "\n";
+		$c = tdn_primary_cat();
+		if ( $c ) {
+			echo '<meta property="article:section" content="' . esc_attr( $c->name ) . '">' . "\n";
+		}
+	}
+	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+	echo '<meta name="twitter:title" content="' . esc_attr( $title ) . '">' . "\n";
+	echo '<meta name="twitter:description" content="' . esc_attr( $desc ) . '">' . "\n";
+	if ( $img ) {
+		echo '<meta name="twitter:image" content="' . esc_url( $img ) . '">' . "\n";
 	}
 }, 1 );
+
+/** Put the story's picture in the RSS feed so auto-posters (Postiz, dlvr.it etc.) attach it. */
+add_action( 'rss2_ns', function () {
+	echo 'xmlns:media="http://search.yahoo.com/mrss/"' . "\n";
+} );
+add_action( 'rss2_item', function () {
+	if ( has_post_thumbnail() ) {
+		$src = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
+		if ( $src ) {
+			echo '<media:content url="' . esc_url( $src[0] ) . '" medium="image" type="image/png" width="' . (int) $src[1] . '" height="' . (int) $src[2] . '" />' . "\n";
+			echo '<enclosure url="' . esc_url( $src[0] ) . '" type="image/png" length="0" />' . "\n";
+		}
+	}
+} );
