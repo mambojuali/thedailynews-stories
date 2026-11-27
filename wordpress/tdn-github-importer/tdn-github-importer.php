@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -17,7 +17,7 @@ class TDN_GitHub_Importer {
 	const DONE     = 'tdn_importer_done';
 	const HOOK     = 'tdn_importer_run';
 	const SCHEDULE = 'tdn_every_15_min';
-	const CATS     = array( 'Australia', 'Business', 'Property', 'Technology', 'World' );
+	const CATS     = array( 'Australia', 'Business', 'Property', 'Sports', 'Technology', 'World' );
 	const PHOTO_HOSTS = array( 'upload.wikimedia.org', 'thumb.wikimedia.org' );
 	const UA       = 'TheDailyNewsBot/1.3 (+https://thedailynews.news)';
 

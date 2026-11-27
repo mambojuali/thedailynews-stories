@@ -1,6 +1,6 @@
 # The Daily News — House Style
 
-thedailynews.news covers **Australia national news**, **business & property**, **technology**, and **world headlines** for an Australian reader.
+thedailynews.news covers **Australia national news**, **business & property**, **technology**, **sports**, and **world headlines** for an Australian reader.
 
 ## Two formats
 
@@ -32,9 +32,11 @@ Rule of thumb: Category `Business` or `Property` → `explainer`. Everything els
 9. **Images.** Never download or attach photos yourself. Instead give each story an `image_query`: 1–3 short Wikimedia Commons search phrases (most specific first) describing a **place, building, object or scene** that fits the story, e.g. `["Parliament House Canberra", "Australian House of Representatives chamber"]`, `["LNG tanker", "natural gas pipeline Australia"]`, `["Frankfurt European Central Bank building"]`. **Never name or describe a person** (no politicians, executives, victims, suspects) and nothing graphic. The WordPress importer finds a freely licensed (CC/public domain) photo for the query and credits it; if none fits, the story's headline card is used.
 
 ## Categories (use exactly one)
-`Australia`, `Business`, `Property`, `Technology`, `World`
+`Australia`, `Business`, `Property`, `Sports`, `Technology`, `World`
 
 `Technology` covers tech companies, AI, cyber security, telcos and digital policy, with an Australian angle where possible. Use `wire` format unless the story is mainly about the impact on people's money or jobs (then `explainer`).
+
+`Sports` covers major Australian and international sport (AFL, NRL, cricket, rugby, football, tennis, Olympics/Commonwealth Games, motorsport, netball). Always `wire` format. Scores, results, dates and venues must match the official league/governing-body source or two reputable outlets. No betting odds or gambling promotion. Image queries must be venues, stadiums, grounds or equipment (e.g. `["Melbourne Cricket Ground", "cricket ball and stumps"]`) — never players or named people.
 
 ## Tags
 3–6 lowercase tags: people, organisations, places, topics (e.g. `rba`, `interest rates`, `brisbane`, `housing`).

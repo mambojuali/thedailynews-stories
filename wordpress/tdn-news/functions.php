@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const TDN_SECTIONS = array( 'australia' => 'Australia', 'business' => 'Business', 'property' => 'Property', 'technology' => 'Technology', 'world' => 'World' );
+const TDN_SECTIONS = array( 'australia' => 'Australia', 'business' => 'Business', 'property' => 'Property', 'sports' => 'Sports', 'technology' => 'Technology', 'world' => 'World' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

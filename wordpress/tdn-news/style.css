@@ -1,7 +1,7 @@
 /*
 Theme Name: The Daily News
 Description: Lightweight newspaper theme for thedailynews.news
-Version: 1.1.0
+Version: 1.2.0
 Author: The Daily News
 License: GPL-2.0-or-later
 Text Domain: tdn-news
@@ -18,6 +18,7 @@ Text Domain: tdn-news
 	--cat-australia: #0f6e3f;
 	--cat-business: #0d4f8b;
 	--cat-property: #8a4b08;
+	--cat-sports: #d9480f;
 	--cat-technology: #0e7490;
 	--cat-world: #6b2c91;
 	--serif: Georgia, "Times New Roman", Times, serif;
@@ -67,6 +68,7 @@ img { max-width: 100%; height: auto; display: block; }
 .kicker.cat-australia { color: var(--cat-australia); }
 .kicker.cat-business { color: var(--cat-business); }
 .kicker.cat-property { color: var(--cat-property); }
+.kicker.cat-sports { color: var(--cat-sports); }
 .kicker.cat-technology { color: var(--cat-technology); }
 .kicker.cat-world { color: var(--cat-world); }
 .meta { color: var(--muted); font-size: 13px; }
@@ -93,6 +95,7 @@ img { max-width: 100%; height: auto; display: block; }
 .section-block.cat-australia .section-head { border-color: var(--cat-australia); }
 .section-block.cat-business .section-head { border-color: var(--cat-business); }
 .section-block.cat-property .section-head { border-color: var(--cat-property); }
+.section-block.cat-sports .section-head { border-color: var(--cat-sports); }
 .section-block.cat-technology .section-head { border-color: var(--cat-technology); }
 .section-block.cat-world .section-head { border-color: var(--cat-world); }
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 28px; }
@@ -116,7 +119,9 @@ img { max-width: 100%; height: auto; display: block; }
 .summary-block.cat-business .summary-head h2 { color: var(--cat-business); }
 .summary-block.cat-property .summary-head { border-color: var(--cat-property); }
 .summary-block.cat-property .summary-head h2 { color: var(--cat-property); }
+.summary-block.cat-sports .summary-head { border-color: var(--cat-sports); }
 .summary-block.cat-technology .summary-head { border-color: var(--cat-technology); }
+.summary-block.cat-sports .summary-head h2 { color: var(--cat-sports); }
 .summary-block.cat-technology .summary-head h2 { color: var(--cat-technology); }
 .summary-block.cat-world .summary-head { border-color: var(--cat-world); }
 .summary-block.cat-world .summary-head h2 { color: var(--cat-world); }
@@ -135,6 +140,7 @@ img { max-width: 100%; height: auto; display: block; }
 .thumb-fallback.cat-australia { background-color: var(--cat-australia); }
 .thumb-fallback.cat-business { background-color: var(--cat-business); }
 .thumb-fallback.cat-property { background-color: var(--cat-property); }
+.thumb-fallback.cat-sports { background-color: var(--cat-sports); }
 .thumb-fallback.cat-technology { background-color: var(--cat-technology); }
 .thumb-fallback.cat-world { background-color: var(--cat-world); }
 
