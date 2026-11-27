@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -232,8 +232,10 @@ class TDN_GitHub_Importer {
 			self::log( 'Commons search failed for "' . $query . '"' );
 			return array();
 		}
-		$data  = json_decode( wp_remote_retrieve_body( $res ), true );
+		$rawb  = wp_remote_retrieve_body( $res );
+		$data  = json_decode( $rawb, true );
 		$pages = $data['query']['pages'] ?? array();
+		$why   = array();
 		uasort(
 			$pages,
 			function ( $a, $b ) {
@@ -247,24 +249,29 @@ class TDN_GitHub_Importer {
 			}
 			$ii = $pg['imageinfo'][0] ?? null;
 			if ( ! $ii || ! in_array( $ii['mime'] ?? '', array( 'image/jpeg', 'image/png', 'image/webp' ), true ) ) {
+				$why[] = 'mime';
 				continue;
 			}
 			$w = (int) ( $ii['width'] ?? 0 );
 			$h = (int) ( $ii['height'] ?? 0 );
 			if ( $w < 1000 || $w < $h * 1.2 ) {
+				$why[] = 'size';
 				continue; // landscape and reasonably large only
 			}
 			$meta    = $ii['extmetadata'] ?? array();
 			$license = trim( wp_strip_all_tags( $meta['LicenseShortName']['value'] ?? '' ) );
 			if ( ! preg_match( '/^(CC0|CC BY(-SA)?( \d\.\d)?|Public domain|PD\b)/i', $license ) ) {
+				$why[] = 'lic:' . $license;
 				continue; // reusable licences only
 			}
 			$title = strtolower( $pg['title'] ?? '' );
 			if ( preg_match( '/portrait|headshot|selfie|mugshot/', $title ) ) {
+				$why[] = 'person';
 				continue; // no photos of individuals
 			}
 			$thumb = $ii['thumburl'] ?? $ii['url'];
 			if ( ! in_array( wp_parse_url( $thumb, PHP_URL_HOST ), self::PHOTO_HOSTS, true ) ) {
+				$why[] = 'host';
 				continue;
 			}
 			$artist = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $meta['Artist']['value'] ?? 'Unknown' ) ) );
@@ -277,6 +284,9 @@ class TDN_GitHub_Importer {
 				'title'   => preg_replace( '/^File:|\.[a-z0-9]+$/i', '', $pg['title'] ?? '' ),
 				'mime'    => $ii['thumbmime'] ?? $ii['mime'],
 			);
+		}
+		if ( ! $hits ) {
+			self::log( 'Commons "' . $query . '": ' . count( $pages ) . ' results, none usable [' . implode( ',', array_slice( $why, 0, 8 ) ) . ']' . ( $pages ? '' : ' body:' . substr( $rawb, 0, 160 ) ) );
 		}
 		return $hits;
 	}
