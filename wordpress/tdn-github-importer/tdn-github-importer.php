@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.2.3
+ * Version: 1.3.0
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -19,7 +19,7 @@ class TDN_GitHub_Importer {
 	const SCHEDULE = 'tdn_every_15_min';
 	const CATS     = array( 'Australia', 'Business', 'Property', 'Technology', 'World' );
 	const PHOTO_HOSTS = array( 'upload.wikimedia.org', 'thumb.wikimedia.org' );
-	const UA       = 'TheDailyNewsBot/1.2.1 (+https://thedailynews.news)';
+	const UA       = 'TheDailyNewsBot/1.3 (+https://thedailynews.news)';
 
 	public static function init() {
 		add_filter( 'cron_schedules', array( __CLASS__, 'schedules' ) );
@@ -120,10 +120,10 @@ class TDN_GitHub_Importer {
 				continue;
 			}
 			$status = get_post_meta( $pid, '_tdn_photo_status', true );
-			$tries  = (int) get_post_meta( $pid, '_tdn_photo_tries', true );
-			if ( $budget > 0 && ! in_array( $status, array( 'ok', 'no-query' ), true ) && $tries < 3 ) {
+			$tries  = (int) get_post_meta( $pid, '_tdn_photo_tries2', true );
+			if ( $budget > 0 && ! in_array( $status, array( 'ok2', 'no-query', 'manual' ), true ) && $tries < 3 ) {
 				$budget--;
-				update_post_meta( $pid, '_tdn_photo_tries', $tries + 1 );
+				update_post_meta( $pid, '_tdn_photo_tries2', $tries + 1 );
 				$raw = self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $jpath ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
 				$st  = is_wp_error( $raw ) ? null : json_decode( $raw, true );
 				if ( is_array( $st ) ) {
@@ -187,6 +187,12 @@ class TDN_GitHub_Importer {
 	 * and set it as the featured image, with a credit caption. Returns attachment ID or 0.
 	 */
 	private static function attach_photo( $post_id, $story ) {
+		// Never replace an image an editor chose by hand.
+		$cur = get_post_thumbnail_id( $post_id );
+		if ( $cur && ! get_post_meta( $cur, '_tdn_source_page', true ) && ! get_post_meta( $cur, '_tdn_card', true ) ) {
+			update_post_meta( $post_id, '_tdn_photo_status', 'manual' );
+			return 0;
+		}
 		$queries = $story['image_query'] ?? array();
 		if ( is_string( $queries ) ) {
 			$queries = array( $queries );
@@ -196,29 +202,37 @@ class TDN_GitHub_Importer {
 			update_post_meta( $post_id, '_tdn_photo_status', 'no-query' );
 			return 0;
 		}
+		$passes = array();
 		foreach ( $queries as $q ) {
-			foreach ( self::commons_search( $q ) as $hit ) {
+			$passes[] = array( $q, true );
+		}
+		foreach ( $queries as $q ) {
+			$passes[] = array( $q, false );
+		}
+		foreach ( $passes as $pass ) {
+			list( $q, $quality ) = $pass;
+			foreach ( self::commons_search( $q, $quality ) as $hit ) {
 				$att = self::sideload_photo( $post_id, $hit );
 				if ( $att ) {
 					set_post_thumbnail( $post_id, $att );
-					update_post_meta( $post_id, '_tdn_photo_status', 'ok' );
-					self::log( 'Photo attached to #' . $post_id . ' (' . $q . ')' );
+					update_post_meta( $post_id, '_tdn_photo_status', 'ok2' );
+					self::log( 'Photo attached to #' . $post_id . ' (' . $q . ( $quality ? ', quality image' : '' ) . ')' );
 					return $att;
 				}
 			}
 		}
 		update_post_meta( $post_id, '_tdn_photo_status', 'none' );
-		self::log( 'No licensed photo found for #' . $post_id );
+		self::log( 'No licensed photo found for #' . $post_id . ( $cur ? ' (kept current image)' : '' ) );
 		return 0;
 	}
 
-	private static function commons_search( $query ) {
+	private static function commons_search( $query, $quality = false ) {
 		$url = add_query_arg(
 			array(
 				'action'       => 'query',
 				'format'       => 'json',
 				'generator'    => 'search',
-				'gsrsearch'    => rawurlencode( $query . ' filetype:bitmap' ),
+				'gsrsearch'    => rawurlencode( $query . ' filetype:bitmap' . ( $quality ? ' incategory:Quality_images' : '' ) ),
 				'gsrnamespace' => 6,
 				'gsrlimit'     => 15,
 				'prop'         => 'imageinfo',
@@ -248,7 +262,7 @@ class TDN_GitHub_Importer {
 				break;
 			}
 			$ii = $pg['imageinfo'][0] ?? null;
-			if ( ! $ii || ! in_array( $ii['mime'] ?? '', array( 'image/jpeg', 'image/png', 'image/webp' ), true ) ) {
+			if ( ! $ii || 'image/jpeg' !== ( $ii['mime'] ?? '' ) ) {
 				$why[] = 'mime';
 				continue;
 			}
@@ -265,7 +279,7 @@ class TDN_GitHub_Importer {
 				continue; // reusable licences only
 			}
 			$title = strtolower( $pg['title'] ?? '' );
-			if ( preg_match( '/portrait|headshot|selfie|mugshot/', $title ) ) {
+			if ( preg_match( '/\\b(portrait|headshot|selfie|mugshot|diagram|drawing|map|chart|logo|plan|coat of arms|flag of)\\b/', $title ) ) {
 				$why[] = 'person';
 				continue; // no photos of individuals
 			}
@@ -285,7 +299,7 @@ class TDN_GitHub_Importer {
 				'mime'    => $ii['thumbmime'] ?? $ii['mime'],
 			);
 		}
-		if ( ! $hits ) {
+		if ( ! $hits && ! $quality ) {
 			self::log( 'Commons "' . $query . '": ' . count( $pages ) . ' results, none usable [' . implode( ',', array_slice( $why, 0, 8 ) ) . ']' . ( $pages ? '' : ' body:' . substr( $rawb, 0, 160 ) ) );
 		}
 		return $hits;
@@ -398,6 +412,7 @@ class TDN_GitHub_Importer {
 		}
 		wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
 		update_post_meta( $att_id, '_wp_attachment_image_alt', $title );
+		update_post_meta( $att_id, '_tdn_card', 1 );
 		set_post_thumbnail( $post_id, $att_id );
 		self::log( 'Card attached to #' . $post_id );
 		return $att_id;
