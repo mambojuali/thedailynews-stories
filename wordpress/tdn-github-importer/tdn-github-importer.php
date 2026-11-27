@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -19,7 +19,7 @@ class TDN_GitHub_Importer {
 	const SCHEDULE = 'tdn_every_15_min';
 	const CATS     = array( 'Australia', 'Business', 'Property', 'Technology', 'World' );
 	const PHOTO_HOSTS = array( 'upload.wikimedia.org' );
-	const UA       = 'TheDailyNewsBot/1.2 (+https://thedailynews.news)';
+	const UA       = 'TheDailyNewsBot/1.2.1 (+https://thedailynews.news)';
 
 	public static function init() {
 		add_filter( 'cron_schedules', array( __CLASS__, 'schedules' ) );
@@ -119,8 +119,11 @@ class TDN_GitHub_Importer {
 			if ( ! is_int( $pid ) || ! get_post( $pid ) ) {
 				continue;
 			}
-			if ( $budget > 0 && ! get_post_meta( $pid, '_tdn_photo_status', true ) ) {
+			$status = get_post_meta( $pid, '_tdn_photo_status', true );
+			$tries  = (int) get_post_meta( $pid, '_tdn_photo_tries', true );
+			if ( $budget > 0 && ! in_array( $status, array( 'ok', 'no-query' ), true ) && $tries < 3 ) {
 				$budget--;
+				update_post_meta( $pid, '_tdn_photo_tries', $tries + 1 );
 				$raw = self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $jpath ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
 				$st  = is_wp_error( $raw ) ? null : json_decode( $raw, true );
 				if ( is_array( $st ) ) {
@@ -194,16 +197,14 @@ class TDN_GitHub_Importer {
 			return 0;
 		}
 		foreach ( $queries as $q ) {
-			$hit = self::commons_search( $q );
-			if ( ! $hit ) {
-				continue;
-			}
-			$att = self::sideload_photo( $post_id, $hit );
-			if ( $att ) {
-				set_post_thumbnail( $post_id, $att );
-				update_post_meta( $post_id, '_tdn_photo_status', 'ok' );
-				self::log( 'Photo attached to #' . $post_id . ' (' . $q . ')' );
-				return $att;
+			foreach ( self::commons_search( $q ) as $hit ) {
+				$att = self::sideload_photo( $post_id, $hit );
+				if ( $att ) {
+					set_post_thumbnail( $post_id, $att );
+					update_post_meta( $post_id, '_tdn_photo_status', 'ok' );
+					self::log( 'Photo attached to #' . $post_id . ' (' . $q . ')' );
+					return $att;
+				}
 			}
 		}
 		update_post_meta( $post_id, '_tdn_photo_status', 'none' );
@@ -222,14 +223,14 @@ class TDN_GitHub_Importer {
 				'gsrlimit'     => 15,
 				'prop'         => 'imageinfo',
 				'iiprop'       => rawurlencode( 'url|size|mime|extmetadata' ),
-				'iiurlwidth'   => 1600,
+				'iiurlwidth'   => 1280,
 			),
 			'https://commons.wikimedia.org/w/api.php'
 		);
 		$res = wp_remote_get( $url, array( 'timeout' => 20, 'headers' => array( 'User-Agent' => self::UA ) ) );
 		if ( is_wp_error( $res ) || 200 !== wp_remote_retrieve_response_code( $res ) ) {
 			self::log( 'Commons search failed for "' . $query . '"' );
-			return null;
+			return array();
 		}
 		$data  = json_decode( wp_remote_retrieve_body( $res ), true );
 		$pages = $data['query']['pages'] ?? array();
@@ -239,7 +240,11 @@ class TDN_GitHub_Importer {
 				return ( $a['index'] ?? 99 ) <=> ( $b['index'] ?? 99 );
 			}
 		);
+		$hits = array();
 		foreach ( $pages as $pg ) {
+			if ( count( $hits ) >= 4 ) {
+				break;
+			}
 			$ii = $pg['imageinfo'][0] ?? null;
 			if ( ! $ii || ! in_array( $ii['mime'] ?? '', array( 'image/jpeg', 'image/png', 'image/webp' ), true ) ) {
 				continue;
@@ -263,7 +268,7 @@ class TDN_GitHub_Importer {
 				continue;
 			}
 			$artist = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $meta['Artist']['value'] ?? 'Unknown' ) ) );
-			return array(
+			$hits[] = array(
 				'url'     => $thumb,
 				'page'    => $ii['descriptionurl'] ?? '',
 				'artist'  => mb_substr( $artist ?: 'Unknown', 0, 80 ),
@@ -273,12 +278,13 @@ class TDN_GitHub_Importer {
 				'mime'    => $ii['thumbmime'] ?? $ii['mime'],
 			);
 		}
-		return null;
+		return $hits;
 	}
 
 	private static function sideload_photo( $post_id, $hit ) {
 		$res = wp_remote_get( $hit['url'], array( 'timeout' => 30, 'headers' => array( 'User-Agent' => self::UA ) ) );
 		if ( is_wp_error( $res ) || 200 !== wp_remote_retrieve_response_code( $res ) ) {
+			self::log( 'Photo download failed (' . ( is_wp_error( $res ) ? $res->get_error_message() : wp_remote_retrieve_response_code( $res ) ) . '): ' . $hit['title'] );
 			return 0;
 		}
 		$bin = wp_remote_retrieve_body( $res );
