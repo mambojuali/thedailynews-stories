@@ -1,7 +1,7 @@
 /*
 Theme Name: The Daily News
 Description: Lightweight newspaper theme for thedailynews.news
-Version: 1.0.0
+Version: 1.0.1
 Author: The Daily News
 License: GPL-2.0-or-later
 Text Domain: tdn-news
@@ -118,6 +118,7 @@ img { max-width: 100%; height: auto; display: block; }
 .standfirst { font: 21px/1.45 var(--serif); color: #2d323b; margin: 0 0 18px; }
 .byline { display: flex; flex-wrap: wrap; gap: 6px 0; align-items: center; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 26px; font-size: 14px; color: var(--muted); }
 .byline strong { color: var(--ink); }
+.byline .sep { margin: 0 8px; }
 .article .hero-img { margin: 0 0 26px; }
 .entry-content { font: 19px/1.7 var(--serif); color: #1f232a; }
 .entry-content p { margin: 0 0 1.15em; }

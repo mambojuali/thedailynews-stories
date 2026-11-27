@@ -43,14 +43,14 @@ $lead     = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish' ) )
 				if ( ! $term ) {
 					continue;
 				}
-				$posts = get_posts(
-					array(
-						'numberposts'  => 5,
-						'post_status'  => 'publish',
-						'category'     => $term->term_id,
-						'post__not_in' => $tdn_seen,
-					)
-				);
+				// Prefer stories not already in the lead zone; fall back to all recent stories in the section.
+				$posts = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'category' => $term->term_id, 'post__not_in' => $tdn_seen ) );
+				if ( count( $posts ) < 2 ) {
+					$posts = get_posts( array( 'numberposts' => 5, 'post_status' => 'publish', 'category' => $term->term_id ) );
+				}
+				if ( ! $posts ) {
+					continue;
+				}
 				?>
 				<section class="section-block cat-<?php echo esc_attr( $slug ); ?>">
 					<div class="section-head">
