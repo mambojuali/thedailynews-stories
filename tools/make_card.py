@@ -22,6 +22,7 @@ CAT = {
     "Australia": (15, 110, 63),
     "Business": (13, 79, 139),
     "Property": (138, 75, 8),
+    "Technology": (14, 116, 144),
     "World": (107, 44, 145),
 }
 

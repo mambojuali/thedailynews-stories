@@ -9,11 +9,11 @@ Read `STYLE.md` before writing. Follow it exactly.
 ### 1. Scout
 - Run time and date in Australia/Brisbane. Determine this run's slot: `0600`, `1200` or `1700`.
 - Read the last 3 days of `ledger.jsonl` to know what's already covered.
-- Use web search to find the most important stories of the last 24 hours across the four categories. Search separately for each: Australian national news; Australian business/ASX/RBA/economy; Australian property/housing/rents; world headlines.
+- Use web search to find the most important stories of the last 24 hours across the four categories. Search separately for each: Australian national news; Australian business/ASX/RBA/economy; Australian property/housing/rents; technology (AI, big tech, cyber, telcos, digital policy); world headlines.
 - Build a shortlist of 6–8 candidates. Score each 1–5 on: importance to Australian readers, freshness, source quality, and not-already-covered.
 - Pick the **top 2**, with this rotation so the mix stays balanced across the day:
   - `0600`: 1 × Australia or World, 1 × Business or Property
-  - `1200`: 1 × Business or Property, 1 × World or Australia
+  - `1200`: 1 × Technology, 1 × Business, Property or World
   - `1700`: 1 × Australia, 1 × any (highest score)
 
 ### 2. Researcher (per story)
@@ -23,7 +23,7 @@ Read `STYLE.md` before writing. Follow it exactly.
 ### 3. Writer (per story)
 - Write the story from the fact sheet **only**, in the format STYLE.md assigns (`wire` or `explainer`).
 - Completely original wording. Never paste or closely mirror source sentences.
-- Output the JSON fields from `schema/story.example.json`. `content_html` uses only `<p>`, `<h2>`, `<ul>`, `<li>`, `<strong>`, `<em>`, `<blockquote>`.
+- Output the JSON fields from `schema/story.example.json`, including `image_query` (see STYLE.md rule 9 — places/objects/scenes only, never people). `content_html` uses only `<p>`, `<h2>`, `<ul>`, `<li>`, `<strong>`, `<em>`, `<blockquote>`.
 
 ### 4. Editor (per story)
 Check against the STYLE.md hard rules, one by one:
@@ -33,6 +33,7 @@ Check against the STYLE.md hard rules, one by one:
 - Defamation, suppression, minors, victims: anything risky → cut it, or reject the story.
 - Balance on political stories.
 - Headline < 75 chars, excerpt < 160 chars, word count in range, Australian spelling.
+- `image_query` present, 1–3 phrases, describes no person.
 Return the story to the Writer with specific fixes (max 2 rounds). If it still fails, drop it and take the next candidate from the shortlist. Record the checks in `editor_notes`.
 
 ### 5. Publisher

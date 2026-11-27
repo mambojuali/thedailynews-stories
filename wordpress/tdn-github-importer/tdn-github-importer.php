@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Daily News – GitHub Story Importer
  * Description: Imports new story JSON files from a private GitHub repo as WordPress drafts every 15 minutes. Never publishes.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: The Daily News
  * License: GPL-2.0-or-later
  */
@@ -17,7 +17,9 @@ class TDN_GitHub_Importer {
 	const DONE     = 'tdn_importer_done';
 	const HOOK     = 'tdn_importer_run';
 	const SCHEDULE = 'tdn_every_15_min';
-	const CATS     = array( 'Australia', 'Business', 'Property', 'World' );
+	const CATS     = array( 'Australia', 'Business', 'Property', 'Technology', 'World' );
+	const PHOTO_HOSTS = array( 'upload.wikimedia.org' );
+	const UA       = 'TheDailyNewsBot/1.2 (+https://thedailynews.news)';
 
 	public static function init() {
 		add_filter( 'cron_schedules', array( __CLASS__, 'schedules' ) );
@@ -25,6 +27,7 @@ class TDN_GitHub_Importer {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 		add_action( 'admin_post_tdn_import_now', array( __CLASS__, 'import_now' ) );
+		add_action( 'admin_post_tdn_self_update', array( __CLASS__, 'self_update' ) );
 		add_action( 'init', array( __CLASS__, 'ensure_scheduled' ) );
 	}
 
@@ -108,10 +111,24 @@ class TDN_GitHub_Importer {
 			}
 		}
 
-		// Backfill: attach headline cards to already-imported stories that have none.
+		self::ensure_terms();
+
+		// Backfill already-imported stories: licensed photo first, headline card as fallback.
+		$budget = 6; // limit photo lookups per run
 		foreach ( $done as $jpath => $pid ) {
+			if ( ! is_int( $pid ) || ! get_post( $pid ) ) {
+				continue;
+			}
+			if ( $budget > 0 && ! get_post_meta( $pid, '_tdn_photo_status', true ) ) {
+				$budget--;
+				$raw = self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $jpath ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
+				$st  = is_wp_error( $raw ) ? null : json_decode( $raw, true );
+				if ( is_array( $st ) ) {
+					self::attach_photo( $pid, $st );
+				}
+			}
 			$png = substr( $jpath, 0, -5 ) . '.png';
-			if ( is_int( $pid ) && isset( $pngs[ $png ] ) && get_post( $pid ) && ! has_post_thumbnail( $pid ) ) {
+			if ( isset( $pngs[ $png ] ) && ! has_post_thumbnail( $pid ) ) {
 				self::attach_card( $pid, $png );
 			}
 		}
@@ -137,8 +154,9 @@ class TDN_GitHub_Importer {
 			}
 			$post_id = self::create_draft( $story, $path );
 			if ( $post_id ) {
+				self::attach_photo( $post_id, $story );
 				$png = substr( $path, 0, -5 ) . '.png';
-				if ( isset( $pngs[ $png ] ) ) {
+				if ( isset( $pngs[ $png ] ) && ! has_post_thumbnail( $post_id ) ) {
 					self::attach_card( $post_id, $png );
 				}
 				$done[ $path ] = $post_id;
@@ -151,6 +169,187 @@ class TDN_GitHub_Importer {
 			self::log( 'Checked GitHub: no new stories.' );
 		}
 		return $new;
+	}
+
+	private static function ensure_terms() {
+		foreach ( self::CATS as $c ) {
+			if ( ! term_exists( $c, 'category' ) ) {
+				wp_insert_term( $c, 'category' );
+			}
+		}
+	}
+
+	/**
+	 * Find a freely licensed photo on Wikimedia Commons for the story's image_query
+	 * and set it as the featured image, with a credit caption. Returns attachment ID or 0.
+	 */
+	private static function attach_photo( $post_id, $story ) {
+		$queries = $story['image_query'] ?? array();
+		if ( is_string( $queries ) ) {
+			$queries = array( $queries );
+		}
+		$queries = array_slice( array_filter( array_map( 'trim', (array) $queries ) ), 0, 3 );
+		if ( ! $queries ) {
+			update_post_meta( $post_id, '_tdn_photo_status', 'no-query' );
+			return 0;
+		}
+		foreach ( $queries as $q ) {
+			$hit = self::commons_search( $q );
+			if ( ! $hit ) {
+				continue;
+			}
+			$att = self::sideload_photo( $post_id, $hit );
+			if ( $att ) {
+				set_post_thumbnail( $post_id, $att );
+				update_post_meta( $post_id, '_tdn_photo_status', 'ok' );
+				self::log( 'Photo attached to #' . $post_id . ' (' . $q . ')' );
+				return $att;
+			}
+		}
+		update_post_meta( $post_id, '_tdn_photo_status', 'none' );
+		self::log( 'No licensed photo found for #' . $post_id );
+		return 0;
+	}
+
+	private static function commons_search( $query ) {
+		$url = add_query_arg(
+			array(
+				'action'       => 'query',
+				'format'       => 'json',
+				'generator'    => 'search',
+				'gsrsearch'    => rawurlencode( $query . ' filetype:bitmap' ),
+				'gsrnamespace' => 6,
+				'gsrlimit'     => 15,
+				'prop'         => 'imageinfo',
+				'iiprop'       => rawurlencode( 'url|size|mime|extmetadata' ),
+				'iiurlwidth'   => 1600,
+			),
+			'https://commons.wikimedia.org/w/api.php'
+		);
+		$res = wp_remote_get( $url, array( 'timeout' => 20, 'headers' => array( 'User-Agent' => self::UA ) ) );
+		if ( is_wp_error( $res ) || 200 !== wp_remote_retrieve_response_code( $res ) ) {
+			self::log( 'Commons search failed for "' . $query . '"' );
+			return null;
+		}
+		$data  = json_decode( wp_remote_retrieve_body( $res ), true );
+		$pages = $data['query']['pages'] ?? array();
+		uasort(
+			$pages,
+			function ( $a, $b ) {
+				return ( $a['index'] ?? 99 ) <=> ( $b['index'] ?? 99 );
+			}
+		);
+		foreach ( $pages as $pg ) {
+			$ii = $pg['imageinfo'][0] ?? null;
+			if ( ! $ii || ! in_array( $ii['mime'] ?? '', array( 'image/jpeg', 'image/png', 'image/webp' ), true ) ) {
+				continue;
+			}
+			$w = (int) ( $ii['width'] ?? 0 );
+			$h = (int) ( $ii['height'] ?? 0 );
+			if ( $w < 1000 || $w < $h * 1.2 ) {
+				continue; // landscape and reasonably large only
+			}
+			$meta    = $ii['extmetadata'] ?? array();
+			$license = trim( wp_strip_all_tags( $meta['LicenseShortName']['value'] ?? '' ) );
+			if ( ! preg_match( '/^(CC0|CC BY(-SA)?( \d\.\d)?|Public domain|PD\b)/i', $license ) ) {
+				continue; // reusable licences only
+			}
+			$title = strtolower( $pg['title'] ?? '' );
+			if ( preg_match( '/portrait|headshot|selfie|mugshot/', $title ) ) {
+				continue; // no photos of individuals
+			}
+			$thumb = $ii['thumburl'] ?? $ii['url'];
+			if ( ! in_array( wp_parse_url( $thumb, PHP_URL_HOST ), self::PHOTO_HOSTS, true ) ) {
+				continue;
+			}
+			$artist = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $meta['Artist']['value'] ?? 'Unknown' ) ) );
+			return array(
+				'url'     => $thumb,
+				'page'    => $ii['descriptionurl'] ?? '',
+				'artist'  => mb_substr( $artist ?: 'Unknown', 0, 80 ),
+				'license' => $license,
+				'lic_url' => esc_url_raw( $meta['LicenseUrl']['value'] ?? '' ),
+				'title'   => preg_replace( '/^File:|\.[a-z0-9]+$/i', '', $pg['title'] ?? '' ),
+				'mime'    => $ii['thumbmime'] ?? $ii['mime'],
+			);
+		}
+		return null;
+	}
+
+	private static function sideload_photo( $post_id, $hit ) {
+		$res = wp_remote_get( $hit['url'], array( 'timeout' => 30, 'headers' => array( 'User-Agent' => self::UA ) ) );
+		if ( is_wp_error( $res ) || 200 !== wp_remote_retrieve_response_code( $res ) ) {
+			return 0;
+		}
+		$bin = wp_remote_retrieve_body( $res );
+		if ( strlen( $bin ) < 5000 ) {
+			return 0;
+		}
+		$ext = ( false !== strpos( $hit['mime'], 'png' ) ) ? 'png' : ( ( false !== strpos( $hit['mime'], 'webp' ) ) ? 'webp' : 'jpg' );
+		$up  = wp_upload_bits( sanitize_file_name( 'tdn-' . $post_id . '-' . substr( md5( $hit['url'] ), 0, 8 ) . '.' . $ext ), null, $bin );
+		if ( ! empty( $up['error'] ) ) {
+			return 0;
+		}
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$credit = 'Photo: ' . $hit['artist'] . ' / Wikimedia Commons, ' . $hit['license'];
+		$att    = wp_insert_attachment(
+			array(
+				'post_mime_type' => 'image/' . ( 'jpg' === $ext ? 'jpeg' : $ext ),
+				'post_title'     => $hit['title'],
+				'post_excerpt'   => $credit,
+				'post_status'    => 'inherit',
+			),
+			$up['file'],
+			$post_id
+		);
+		if ( is_wp_error( $att ) || ! $att ) {
+			return 0;
+		}
+		wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $up['file'] ) );
+		update_post_meta( $att, '_wp_attachment_image_alt', $hit['title'] );
+		update_post_meta( $att, '_tdn_source_page', esc_url_raw( $hit['page'] ) );
+		update_post_meta( $att, '_tdn_license_url', $hit['lic_url'] );
+		return $att;
+	}
+
+	/** Admin: pull the latest plugin + theme files from the repo's wordpress/ folder. */
+	public static function self_update() {
+		if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'tdn_self_update' ) ) {
+			wp_die( 'Not allowed' );
+		}
+		$s    = self::settings();
+		$body = self::gh( '/git/trees/' . rawurlencode( $s['branch'] ) . '?recursive=1' );
+		$tree = is_wp_error( $body ) ? array() : json_decode( $body, true );
+		$map  = array(
+			'wordpress/tdn-github-importer/' => trailingslashit( WP_PLUGIN_DIR ) . 'tdn-github-importer/',
+			'wordpress/tdn-news/'            => trailingslashit( get_theme_root() ) . 'tdn-news/',
+		);
+		$n    = 0;
+		foreach ( (array) ( $tree['tree'] ?? array() ) as $item ) {
+			if ( 'blob' !== ( $item['type'] ?? '' ) ) {
+				continue;
+			}
+			foreach ( $map as $prefix => $dest ) {
+				if ( 0 !== strpos( $item['path'], $prefix ) ) {
+					continue;
+				}
+				$rel = substr( $item['path'], strlen( $prefix ) );
+				if ( '' === $rel || false !== strpos( $rel, '..' ) || ! preg_match( '/\.(php|css|js|txt|md)$/', $rel ) ) {
+					continue;
+				}
+				$raw = self::gh( '/contents/' . implode( '/', array_map( 'rawurlencode', explode( '/', $item['path'] ) ) ) . '?ref=' . rawurlencode( $s['branch'] ), true );
+				if ( is_wp_error( $raw ) || '' === $raw ) {
+					continue;
+				}
+				wp_mkdir_p( dirname( $dest . $rel ) );
+				if ( false !== file_put_contents( $dest . $rel, $raw ) ) {
+					$n++;
+				}
+			}
+		}
+		self::log( 'Self-update: ' . $n . ' file(s) refreshed from GitHub.' );
+		wp_safe_redirect( admin_url( 'options-general.php?page=tdn-importer&updated=' . $n ) );
+		exit;
 	}
 
 	/** Download a headline card PNG from the repo and set it as the post's featured image. */
@@ -301,6 +500,14 @@ class TDN_GitHub_Importer {
 				<?php wp_nonce_field( 'tdn_import_now' ); ?>
 				<?php submit_button( 'Import now', 'secondary' ); ?>
 			</form>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="tdn_self_update">
+				<?php wp_nonce_field( 'tdn_self_update' ); ?>
+				<?php submit_button( 'Update plugin & theme from GitHub', 'secondary' ); ?>
+			</form>
+			<?php if ( isset( $_GET['updated'] ) ) : ?>
+				<div class="notice notice-success"><p><?php echo (int) $_GET['updated']; ?> file(s) updated from GitHub.</p></div>
+			<?php endif; ?>
 			<p>Next automatic check: <?php echo $next ? esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next ), 'D j M, g:i a' ) ) : 'not scheduled'; ?></p>
 			<h2>Recent activity</h2>
 			<pre style="background:#fff;padding:12px;max-height:320px;overflow:auto"><?php echo esc_html( implode( "\n", $log ) ?: 'Nothing yet.' ); ?></pre>

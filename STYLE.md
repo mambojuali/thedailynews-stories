@@ -1,6 +1,6 @@
 # The Daily News — House Style
 
-thedailynews.news covers **Australia national news**, **business & property**, and **world headlines** for an Australian reader.
+thedailynews.news covers **Australia national news**, **business & property**, **technology**, and **world headlines** for an Australian reader.
 
 ## Two formats
 
@@ -29,10 +29,12 @@ Rule of thumb: Category `Business` or `Property` → `explainer`. Everything els
 6. **Politics is even-handed.** Give the government and the main opposition (or the relevant other side) equal treatment.
 7. **No graphic violence, no speculation about death tolls.** Use official figures with the date and source.
 8. **Freshness.** The news must be from the last 24 hours (48 for explainers), and not already covered in `ledger.jsonl` in the last 3 days unless there's a material new development.
-9. No photos from the web (copyright). Every story gets an original headline card made by `tools/make_card.py`; editors may swap in a licensed photo in WordPress.
+9. **Images.** Never download or attach photos yourself. Instead give each story an `image_query`: 1–3 short Wikimedia Commons search phrases (most specific first) describing a **place, building, object or scene** that fits the story, e.g. `["Parliament House Canberra", "Australian House of Representatives chamber"]`, `["LNG tanker", "natural gas pipeline Australia"]`, `["Frankfurt European Central Bank building"]`. **Never name or describe a person** (no politicians, executives, victims, suspects) and nothing graphic. The WordPress importer finds a freely licensed (CC/public domain) photo for the query and credits it; if none fits, the story's headline card is used.
 
 ## Categories (use exactly one)
-`Australia`, `Business`, `Property`, `World`
+`Australia`, `Business`, `Property`, `Technology`, `World`
+
+`Technology` covers tech companies, AI, cyber security, telcos and digital policy, with an Australian angle where possible. Use `wire` format unless the story is mainly about the impact on people's money or jobs (then `explainer`).
 
 ## Tags
 3–6 lowercase tags: people, organisations, places, topics (e.g. `rba`, `interest rates`, `brisbane`, `housing`).

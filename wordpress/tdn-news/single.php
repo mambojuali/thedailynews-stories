@@ -22,7 +22,17 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 			<?php if ( has_post_thumbnail() ) : ?>
-				<figure class="hero-img"><?php the_post_thumbnail( 'large' ); ?></figure>
+				<figure class="hero-img">
+					<?php the_post_thumbnail( 'large' ); ?>
+					<?php
+					$tdn_tid     = get_post_thumbnail_id();
+					$tdn_caption = wp_get_attachment_caption( $tdn_tid );
+					$tdn_src     = get_post_meta( $tdn_tid, '_tdn_source_page', true );
+					if ( $tdn_caption ) :
+						?>
+						<figcaption><?php echo esc_html( $tdn_caption ); ?><?php if ( $tdn_src ) : ?> · <a href="<?php echo esc_url( $tdn_src ); ?>" target="_blank" rel="noopener nofollow">Source</a><?php endif; ?></figcaption>
+					<?php endif; ?>
+				</figure>
 			<?php endif; ?>
 			<div class="entry-content"><?php the_content(); ?></div>
 			<?php
