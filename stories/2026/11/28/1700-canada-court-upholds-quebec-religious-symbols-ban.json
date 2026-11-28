@@ -1,0 +1,37 @@
+{
+  "id": "2026-11-28-canada-court-upholds-quebec-religious-symbols-ban",
+  "title": "Canada's top court largely upholds Quebec ban on religious symbols",
+  "slug": "canada-court-upholds-quebec-religious-symbols-ban",
+  "format": "wire",
+  "category": "World",
+  "tags": [
+    "canada",
+    "quebec",
+    "bill 21",
+    "supreme court of canada",
+    "religious freedom"
+  ],
+  "image_query": [
+    "Supreme Court of Canada building Ottawa",
+    "Quebec Parliament Building"
+  ],
+  "excerpt": "The Supreme Court of Canada has left most of Quebec's secularism law in force, but found its face-covering rule for MPs breaches democratic rights.",
+  "content_html": "<p>The Supreme Court of Canada has left in place most of Quebec's secularism law, which bars teachers, police and some other public employees from wearing religious symbols such as hijabs, turbans and kippahs at work.</p><p>In a ruling handed down in Ottawa on Friday local time, the court found that Quebec had validly relied on the Canadian Charter's notwithstanding clause to keep the law, known as Bill 21, in force. All seven justices agreed, however, that a provision requiring members of the National Assembly to keep their faces uncovered breaches the Charter's guarantee of democratic rights.</p><h2>What the court decided</h2><p>The notwithstanding clause, section 33 of the Charter, lets a parliament override certain rights for up to five years at a time. Quebec invoked it when it passed the law in June 2019, before any court had considered it, and renewed it in 2024. The court said governments do not need to wait for a judicial ruling before using the power.</p><p>Chief Justice Richard Wagner wrote that the law is grounded in Quebec's \"legitimate and historical commitment\" to secularism, CP24 reported. According to Al Jazeera, Wagner wrote for three of the seven judges.</p><p>The court also rejected arguments that the law breaches gender equality protections, and found the English Montreal School Board had not shown that the rules violated minority-language education rights. A majority of four judges agreed courts may still formally declare that a law is inconsistent with the Charter even when the clause keeps it alive, though the court did not issue such a declaration here.</p><h2>The dissent</h2><p>Justices Andromache Karakatsanis and Michelle O'Bonsawin wrote a partial dissent, finding the law plainly infringes freedom of religion. \"The Act's effects are not experienced equally,\" they wrote, adding that the burden falls hardest on Muslim women, Al Jazeera reported.</p><h2>Background</h2><p>The Coalition Avenir Québec government passed the law 73-35 in the National Assembly, with support from the Parti Québécois. Quebec later widened the restrictions to school support staff, volunteers and daycare workers.</p><p>Al Jazeera reported the law has pushed some public servants out of their jobs or out of the province, and that some Muslim women have removed their hijabs at work to stay employed.</p><p>Quebec's Superior Court upheld most of the law in 2021 but exempted English-language school boards. The Quebec Court of Appeal overturned that exemption in 2024, setting up the appeal to Canada's highest court.</p>",
+  "sources": [
+    {
+      "name": "Al Jazeera",
+      "url": "https://www.aljazeera.com/news/2026/11/27/canadas-top-court-largely-upholds-quebecs-religious-symbols-ban"
+    },
+    {
+      "name": "CP24 / CTV News (Canadian Press)",
+      "url": "https://www.cp24.com/news/canada/2026/11/27/supreme-court-of-canada-upholds-quebecs-secularism-law/"
+    },
+    {
+      "name": "Anadolu Agency — Morning Briefing, 28 November",
+      "url": "https://www.aa.com.tr/en/world/morning-briefing-nov-28-2026/4141123"
+    }
+  ],
+  "editor_notes": "Core outcome (most of law upheld, MNA face-covering rule infringes s.3, unanimous on that point) agrees across Al Jazeera, CP24 and Anadolu. Wagner writing for three justices is Al Jazeera-only and attributed. Two quotes, both under 20 words, attributed via outlet. No vote tally on the main question stated, as sources do not give one. Balance: law's sponsors (CAQ, PQ) and rationale given alongside dissent and critics' account. Reactions from governments omitted as not verified in fetched sources. Image query buildings only. Australian spelling checked.",
+  "created_at": "2026-11-28T17:00:00+10:00",
+  "run": "2026-11-28-1700"
+}
