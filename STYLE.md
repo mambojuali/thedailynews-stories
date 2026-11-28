@@ -36,7 +36,13 @@ Rule of thumb: Category `Business` or `Property` → `explainer`. Everything els
 
 `Technology` covers tech companies, AI, cyber security, telcos and digital policy, with an Australian angle where possible. Use `wire` format unless the story is mainly about the impact on people's money or jobs (then `explainer`).
 
-`Sports` covers major Australian and international sport (AFL, NRL, cricket, rugby, football, tennis, Olympics/Commonwealth Games, motorsport, netball). Always `wire` format. Scores, results, dates and venues must match the official league/governing-body source or two reputable outlets. No betting odds or gambling promotion. Image queries must be venues, stadiums, grounds or equipment (e.g. `["Melbourne Cricket Ground", "cricket ball and stumps"]`) — never players or named people.
+`Sports` covers sport that mainstream Australian outlets under-cover. Priorities, in order:
+1. **English football below the Premier League**, especially the EFL Championship (promotion race, play-offs, managers, ownership stories).
+2. **IPL and franchise cricket**: auctions, retentions, trades, team news, and Australian players in overseas leagues.
+3. **NFL** and **NBA**: results, trades, milestones and big storylines, with an Australian angle where one exists (Australian players, broadcast times in AEST/AEDT).
+4. **Weird and little-known sport**: unusual championships, odd traditions and niche events most readers have never heard of.
+
+Major Australian codes (AFL, NRL, Test cricket, A-League) only when the story is exceptional (a grand final, a scandal, a record) and not already everywhere. Always `wire` format. Scores, results, dates and venues must match the official league/governing-body source or two reputable outlets. No betting odds or gambling promotion. Image queries must be venues, stadiums, grounds or equipment (e.g. `["Hinkle Fieldhouse Indianapolis", "basketball court hardwood"]`) — never players or named people. Explainer-style features on weird sport may run to 500 words and are exempt from the 24-hour freshness rule if tied to an upcoming event.
 
 ## Tags
 3–6 lowercase tags: people, organisations, places, topics (e.g. `rba`, `interest rates`, `brisbane`, `housing`).

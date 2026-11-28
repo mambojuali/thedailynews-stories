@@ -9,7 +9,7 @@ Read `STYLE.md` before writing. Follow it exactly.
 ### 1. Scout
 - Run time and date in Australia/Brisbane. Determine this run's slot: `0600`, `1200` or `1700`.
 - Read the last 3 days of `ledger.jsonl` to know what's already covered.
-- Use web search to find the most important stories of the last 24 hours across the four categories. Search separately for each: Australian national news; Australian business/ASX/RBA/economy; Australian property/housing/rents; technology (AI, big tech, cyber, telcos, digital policy); sport (Australian and international); world headlines.
+- Use web search to find the most important stories of the last 24 hours across the four categories. Search separately for each: Australian national news; Australian business/ASX/RBA/economy; Australian property/housing/rents; technology (AI, big tech, cyber, telcos, digital policy); sport (EFL Championship, IPL/franchise cricket, NFL, NBA, weird and little-known sport — see STYLE.md `Sports`); world headlines.
 - Build a shortlist of 6–8 candidates. Score each 1–5 on: importance to Australian readers, freshness, source quality, and not-already-covered.
 - Pick the **top 2**, with this rotation so the mix stays balanced across the day:
   - `0600`: 1 × Australia or World, 1 × Business or Property
