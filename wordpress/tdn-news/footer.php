@@ -17,6 +17,13 @@
 		<p class="foot-title"><?php bloginfo( 'name' ); ?></p>
 		<p><?php bloginfo( 'description' ); ?></p>
 		<nav aria-label="Footer sections"><?php tdn_sections_nav(); ?></nav>
+		<nav aria-label="About The Daily News" class="foot-pages"><ul>
+			<li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About us</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/corrections-and-editorial-policy/' ) ); ?>">Corrections &amp; editorial policy</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/terms-of-use/' ) ); ?>">Terms of use</a></li>
+		</ul></nav>
 		<p class="small">&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. Stories are researched with AI assistance and reviewed by an editor before publication. Each story lists its sources.</p>
 	</div>
 </footer>

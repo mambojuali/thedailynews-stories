@@ -1,5 +1,20 @@
 <?php
 get_header();
+if ( is_page() ) :
+	while ( have_posts() ) :
+		the_post();
+		?>
+		<div class="wrap">
+			<article class="article page-content">
+				<h1><?php the_title(); ?></h1>
+				<div class="entry-content"><?php the_content(); ?></div>
+			</article>
+		</div>
+		<?php
+	endwhile;
+	get_footer();
+	return;
+endif;
 ?>
 <div class="wrap">
 	<div class="archive-head">
