@@ -1,0 +1,43 @@
+{
+  "id": "2026-11-28-nsw-property-tax-slump-hits-budget",
+  "title": "Property tax slump threatens NSW budget's path back to surplus",
+  "slug": "nsw-property-tax-slump-hits-budget",
+  "format": "explainer",
+  "category": "Business",
+  "tags": [
+    "nsw budget",
+    "stamp duty",
+    "land tax",
+    "daniel mookhey",
+    "housing",
+    "sydney"
+  ],
+  "image_query": [
+    "Sydney suburban houses aerial",
+    "Parliament House Macquarie Street Sydney",
+    "Sydney terrace houses"
+  ],
+  "excerpt": "NSW Treasurer Daniel Mookhey has warned of another large cut to stamp duty and land tax forecasts as Sydney's property market cools.",
+  "content_html": "<p>New South Wales faces another multibillion-dollar hit to its budget as falling property values and slower home sales drag down stamp duty and land tax collections, Treasurer Daniel Mookhey warned on Friday.</p><h2>What happened</h2><p>Mookhey said forecasts for the two property taxes had worsened since the state budget in June, the ABC reported. That budget had already written down expected revenue by $8.4 billion, made up of $5.4 billion in stamp duty and $3 billion in land tax, according to reports in The Sydney Morning Herald and The Age.</p><p>The Treasurer said the government expected to have to <em>\"downgrade the state's revenue by a similar order of magnitude\"</em> when it next updates its forecasts. The Sydney Morning Herald reported the combined shortfall could reach about $16 billion over four years.</p><p>The warning came as the government released the audited 2025-26 Report on State Finances. It showed a deficit of $2.9 billion for the year to June, $575 million smaller than the 2025-26 budget had forecast, while net debt finished $5.9 billion below the budget estimate.</p><p>\"These audited accounts show the Budget is turning around,\" Mookhey said in a statement. The government also said spending in 2025-26 came in $766 million below the estimate in the 2026-27 budget, and that expenses had grown by an average of 3.5 per cent a year over its first three years in office.</p><h2>Why it matters</h2><p>Stamp duty and land tax are among the largest taxes the state raises itself, and both swing sharply with the property cycle. When prices ease and fewer homes change hands, receipts can fall quickly.</p><p>The government's report said duty revenue was strong in the first half of 2025-26, but property prices and the number of sales declined in the final months to June. It said the softening had been concentrated at the higher-value end of the Sydney market.</p><p>Coverage of the Treasurer's remarks pointed to several pressures on housing demand, including higher interest rates, changes to federal tax settings for investors, and higher oil prices linked to conflict in the Middle East, which have weighed on confidence. The Reserve Bank has lifted the cash rate five times in the current cycle, the ABC noted.</p><p>The June budget forecast a return to surplus in 2027-28. Mookhey said that timing was likely to change, according to the ABC, and he did not offer a new date.</p><h2>What it means for you</h2><p><strong>Households:</strong> The warning is a forecast of what the state expects to collect, not an announcement of new tax rates. Lower receipts reflect fewer property sales at lower prices, which means less duty paid across the market overall.</p><p><strong>Property investors:</strong> The government's figures confirm a cooler market, particularly for more expensive Sydney homes. Reports of the Treasurer's comments linked part of the slowdown to federal tax changes that have reduced investor demand.</p><p><strong>Small business:</strong> Businesses that rely on property turnover, such as real estate agents, conveyancers and removalists, are working in a market where the government's own data shows transaction volumes have dropped.</p><p><strong>Taxpayers generally:</strong> A smaller revenue base leaves the state with less room for new spending or relief measures unless savings are found elsewhere, a trade-off the government will have to weigh as it prepares its next set of forecasts.</p><h2>What's next</h2><p>Revised forecasts will be published in the 2026-27 half-yearly review, which the ABC reported is due on 5 February. Further downgrades to property tax estimates are expected then, according to reports of Mookhey's comments, along with a reassessment of when the budget can return to surplus.</p><p>The interest rate outlook will matter for any recovery in property activity. Financial markets are fully pricing a cut to the cash rate by August 2027, according to Bloomberg swap pricing cited by the ABC.</p>",
+  "sources": [
+    {
+      "name": "NSW Government — Labor slashes debt and deficit. Again (2025-26 Report on State Finances release)",
+      "url": "https://www.nationaltribune.com.au/labor-slashes-debt-and-deficit-again"
+    },
+    {
+      "name": "ABC News — business live blog, 27 November 2026",
+      "url": "https://www.abc.net.au/news/2026-11-27/asx-markets-business-news-live-updates/107430390"
+    },
+    {
+      "name": "The Sydney Morning Herald — Stamp duty freefall could cost NSW budget $16 billion",
+      "url": "https://www.smh.com.au/politics/nsw/stamp-duty-freefall-could-cost-nsw-budget-16-billion-20261127-p61hv4.html"
+    },
+    {
+      "name": "Wisevoter — NSW budget faces $16 billion property revenue hit",
+      "url": "https://wisevoter.com/world/au/nsw/2026/11/27/nsw-budget-16-billion-house-price-hit"
+    }
+  ],
+  "editor_notes": "Editor checks (round 1 pass). Facts: $2.9bn 2025-26 deficit, $575m better than budget, net debt $5.9bn below budget, expenses $766m below 2026-27 budget estimate, 3.5% average expense growth, duty strong in H1 then softening concentrated at higher-value Sydney end — all from NSW Government release on 2025-26 Report on State Finances (27 Nov). $8.4bn June write-down, further deterioration, surplus 2027-28 'likely to change', half-yearly review 5 February, RBA five hikes, market pricing cut by Aug 2027 — ABC business blog 27 Nov. $5.4bn/$3bn split and ~$16bn over four years attributed to SMH/The Age (SMH paywalled; figures corroborated by Wisevoter and Particle summaries, and $5.4bn+$3bn matches ABC's $8.4bn). Two quotes, both under 20 words and attributed (Mookhey via ABC; Mookhey via govt release). Balance: no opposition response found in available coverage; government's partisan attacks on Liberals/One Nation deliberately excluded and story kept to fiscal figures. No advice; analysis limited to general effects. Headline 62 chars, excerpt 132 chars, 625+ words, Australian spelling. image_query places/buildings only.",
+  "created_at": "2026-11-28T12:00:00+10:00",
+  "run": "2026-11-28-1200"
+}
